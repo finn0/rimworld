@@ -8,22 +8,27 @@ import (
 )
 
 func TestMarshalAbout(t *testing.T) {
-	denp := []ModDependency{
-		{
-			PackageID:        "1.2.3",
-			DisplayName:      "display name",
-			DownloadURL:      "http://some-download-url/",
-			SteamWorkshopURL: "steam://some-steam-download-url/",
-		},
-	}
-
 	meta := About{
+		XMLName:           xml.Name{Local: "ModMetaData"},
 		Name:              "Test Mod - Plague Gun",
-		Author:            "YourNameHere",
+		Author:            "foo",
+		Authors:           &[]string{"foo", "bar"},
 		PackageID:         "YourNameHere.PlagueGun",
+		URL:               "some-url",
 		SupportedVersions: &[]string{"1.1", "1.2"},
-		Description:       `This mod adds a plague gun, a weapon that has a chance to give your enemies the plague.\n\nFor version 1.1.`,
-		ModDependencies:   &denp,
+		Description:       `a description\nin multiple lines.`,
+		DescriptionsByVersion: &StringByVersion{Value: map[string]string{
+			"v1.1": "desc of v1.1",
+			"v1.2": "desc of v1.1",
+		}},
+		ModDependencies: &[]ModDependency{
+			{
+				PackageID:        "1.2.3",
+				DisplayName:      "display name",
+				DownloadURL:      "http://some-download-url/",
+				SteamWorkshopURL: "steam://some-steam-download-url/",
+			},
+		},
 		ModDependenciesByVersion: &ModDependenciesByVersion{
 			Value: map[string][]ModDependency{
 				"v1.1": {
@@ -73,6 +78,10 @@ func TestUnmarshal(t *testing.T) {
             <li>1.2</li>
           </supportedVersions>
           <description>This mod adds a plague gun, a weapon that has a chance to give your enemies the plague.\n\nFor version 1.1.</description>
+          <descriptionsByVersion>
+		    <v1.1>desc of v1.1</v1.1>
+		    <v1.2>desc of v1.2</v1.2>
+		  </descriptionsByVersion>
           <modDependencies>
             <li>
               <packageId>1.2.3</packageId>
@@ -125,6 +134,9 @@ func TestUnmarshal(t *testing.T) {
 	err := xml.Unmarshal([]byte(s), &about)
 	require.NoError(t, err)
 	t.Logf("%v", about.ModDependenciesByVersion)
-	//t.Logf("%v", about.LoadBefore)
-	//t.Logf("%v", about.LoadBeforeByVersion)
+	t.Logf("%v", about.LoadBefore)
+	t.Logf("%v", about.LoadBeforeByVersion)
+	t.Logf("%v", about.DescriptionsByVersion)
 }
+
+func TestS2S(t *testing.T) {}

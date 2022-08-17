@@ -149,12 +149,12 @@ func (p *StringsByVersion) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 		}
 
 		// ver ends
-		if err := e.EncodeToken(xml.EndElement{Name: verToken.Name}); err != nil {
+		if err := e.EncodeToken(verToken.End()); err != nil {
 			return err
 		}
 	}
 
-	if err := e.EncodeToken(xml.EndElement{Name: start.Name}); err != nil {
+	if err := e.EncodeToken(start.End()); err != nil {
 		return err
 	}
 
@@ -193,12 +193,12 @@ func (m ModDependenciesByVersion) MarshalXML(e *xml.Encoder, start xml.StartElem
 		}
 
 		// ver ends
-		if err := e.EncodeToken(xml.EndElement{Name: verToken.Name}); err != nil {
+		if err := e.EncodeToken(verToken.End()); err != nil {
 			return err
 		}
 	}
 
-	if err := e.EncodeToken(xml.EndElement{Name: start.Name}); err != nil {
+	if err := e.EncodeToken(start.End()); err != nil {
 		return err
 	}
 
